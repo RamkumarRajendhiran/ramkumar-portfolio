@@ -50,10 +50,10 @@ export default function Education({ selectedCollege, selectedVendor, onHighlight
     },
     {
       name: "Kalasalingam Academy of Research and Education",
-      program: "DSA Bootcamp",
+      program: "Data analytics and PowerBI",
       vendor: "Direct / Freelance",
       file: "Kalasalingam.jpg",
-      details: "Led intensive camps on dynamic programming, arrays, and sorting algorithm complexities."
+      details: "Conducted specialized bootcamps on data analysis methodologies, data modeling, and reporting dashboard designs with Power BI."
     },
     {
       name: "SVCE Tirupati",

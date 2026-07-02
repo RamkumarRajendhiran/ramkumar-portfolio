@@ -64,7 +64,7 @@ export default function Certifications() {
       file: "python_basic certificate (3).pdf"
     },
     {
-      name: "Web Development & Frameworks",
+      name: "Mindluster Certification",
       issuer: "Mindluster / Professional",
       file: "Mindluster.pdf"
     }

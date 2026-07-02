@@ -24,7 +24,7 @@ export default function VendorNavbar({ vendors, selectedVendor, onSelectVendor }
             letterSpacing: '0.05em',
             color: 'var(--color-primary)' 
           }}>
-            Secondary Nav: Placement Training Vendors & Partners
+            Placement Training Vendors & Partners
           </span>
         </div>
 

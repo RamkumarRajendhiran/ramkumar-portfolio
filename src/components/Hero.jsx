@@ -1,6 +1,6 @@
-import { scrollToElement } from '../utils/scroll';
 import React from 'react';
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { scrollToElement } from '../utils/scroll';
 
 // Custom Inline SVG Components for Brand Icons to avoid missing export errors in older Lucide versions
 const GithubIcon = (props) => (
@@ -131,28 +131,58 @@ export default function Hero({ onSelectCollege }) {
               </div>
             </div>
 
-            {/* Profile Avatar / Coding Glass Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }} className="hero-avatar-container">
-              <div className="glow-on-hover" style={{
-                width: '200px',
-                height: '200px',
-                borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
-                background: 'linear-gradient(45deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.4))',
-                border: '2px solid var(--color-primary)',
-                boxShadow: 'var(--glow-shadow)',
+            {/* Profile Avatar / Circular Spinning Badge & Morphing Photo */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="hero-avatar-container">
+              <div style={{
+                position: 'relative',
+                width: '240px',
+                height: '240px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                animation: 'morph 8s ease-in-out infinite'
+                justifyContent: 'center'
               }}>
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
-                  fontSize: '3rem',
-                  color: '#ffffff',
-                  textShadow: '0 0 10px rgba(56, 189, 248, 0.6)'
+                {/* Rotating Circular Text Ring */}
+                <svg viewBox="0 0 100 100" width="240" height="240" style={{
+                  position: 'absolute',
+                  animation: 'spin 25s linear infinite',
+                  pointerEvents: 'none',
+                  zIndex: 3
                 }}>
-                  RR
+                  <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+                  <text fill="var(--color-primary)" style={{
+                    fontSize: '4.6px',
+                    letterSpacing: '0.9px',
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-display)',
+                    textTransform: 'uppercase'
+                  }}>
+                    <textPath href="#circlePath" startOffset="0%">
+                      Ramkumar Rajendiran • B.E. CSE • Chennai, TN •
+                    </textPath>
+                  </text>
+                </svg>
+
+                {/* Morphing Profile Picture Container */}
+                <div className="glow-on-hover" style={{
+                  width: '165px',
+                  height: '165px',
+                  borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+                  border: '2.5px solid var(--color-primary)',
+                  boxShadow: 'var(--glow-shadow)',
+                  animation: 'morph 8s ease-in-out infinite',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  zIndex: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'rgba(15, 23, 42, 0.6)'
+                }}>
+                  <img 
+                    src={import.meta.env.BASE_URL + "images/" + encodeURIComponent("Profile Picture.jpg")} 
+                    alt="Ramkumar Rajendiran" 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 </div>
               </div>
             </div>
@@ -165,9 +195,13 @@ export default function Hero({ onSelectCollege }) {
           50% { border-radius: 70% 30% 30% 70% / 70% 60% 40% 30%; }
           100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
         }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; }
-          .hero-avatar-container { margin-top: 1rem; }
+          .hero-avatar-container { margin-top: 2rem; }
         }
       `}</style>
     </section>

@@ -1,10 +1,31 @@
 import { scrollToElement } from '../utils/scroll';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Terminal, BookOpen, GraduationCap, Award, Briefcase, Mail } from 'lucide-react';
 
 export default function Navbar({ onSelectTopic, onSelectCollege, topics, colleges }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null); // 'topics' | 'colleges' | null
+  const [activeSection, setActiveSection] = useState('about');
+
+  useEffect(() => {
+    const sectionIds = ['about', 'experience', 'projects', 'skills', 'education', 'certifications', 'contact'];
+    const observers = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
   const handleNavClick = (id) => {
     setIsOpen(false);
@@ -59,9 +80,9 @@ export default function Navbar({ onSelectTopic, onSelectCollege, topics, college
 
         {/* Desktop Links */}
         <div className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <a href="#about" onClick={(e) => { e.preventDefault(); handleNavClick('about'); }} style={navLinkStyle}>About</a>
-          <a href="#experience" onClick={(e) => { e.preventDefault(); handleNavClick('experience'); }} style={navLinkStyle}>Experience</a>
-          <a href="#projects" onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }} style={navLinkStyle}>Projects</a>
+          <a href="#about" onClick={(e) => { e.preventDefault(); handleNavClick('about'); }} style={navLinkStyle} className={activeSection === 'about' ? 'nav-link-active' : ''}>About</a>
+          <a href="#experience" onClick={(e) => { e.preventDefault(); handleNavClick('experience'); }} style={navLinkStyle} className={activeSection === 'experience' ? 'nav-link-active' : ''}>Experience</a>
+          <a href="#projects" onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }} style={navLinkStyle} className={activeSection === 'projects' ? 'nav-link-active' : ''}>Projects</a>
           
           {/* Topics Dropdown */}
           <div style={{ position: 'relative' }} 
@@ -101,10 +122,10 @@ export default function Navbar({ onSelectTopic, onSelectCollege, topics, college
             )}
           </div>
 
-          <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} style={navLinkStyle}>Skills</a>
-          <a href="#education" onClick={(e) => { e.preventDefault(); handleNavClick('education'); }} style={navLinkStyle}>Education</a>
-          <a href="#certifications" onClick={(e) => { e.preventDefault(); handleNavClick('certifications'); }} style={navLinkStyle}>Certifications</a>
-          <a href="#contact" onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }} style={navLinkStyle}>Contact</a>
+          <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} style={navLinkStyle} className={activeSection === 'skills' ? 'nav-link-active' : ''}>Skills</a>
+          <a href="#education" onClick={(e) => { e.preventDefault(); handleNavClick('education'); }} style={navLinkStyle} className={activeSection === 'education' ? 'nav-link-active' : ''}>Education</a>
+          <a href="#certifications" onClick={(e) => { e.preventDefault(); handleNavClick('certifications'); }} style={navLinkStyle} className={activeSection === 'certifications' ? 'nav-link-active' : ''}>Certifications</a>
+          <a href="#contact" onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }} style={navLinkStyle} className={activeSection === 'contact' ? 'nav-link-active' : ''}>Contact</a>
         </div>
 
         {/* Mobile Menu Icon */}

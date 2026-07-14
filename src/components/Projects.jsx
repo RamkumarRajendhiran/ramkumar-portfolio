@@ -1,5 +1,6 @@
 import React from 'react';
 import { FolderGit2, ExternalLink } from 'lucide-react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const GithubIcon = (props) => (
   <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -8,6 +9,7 @@ const GithubIcon = (props) => (
 );
 
 export default function Projects() {
+  const headerRef = useScrollAnimation();
   const projects = [
     {
       title: "Book Swap Connect",
@@ -18,7 +20,8 @@ export default function Projects() {
         "Created responsive frontend layouts in React.js and styled interface elements based on Figma wireframes.",
         "Integrated Google Maps API to locate and display nearby transaction partners, using MySQL for persistent listing management."
       ],
-      github: "https://github.com/3200584-alt/ramkumar-portfolio"
+      github: "https://github.com/RamkumarRajendhiran/ramkumar-portfolio",
+      demo: null
     },
     {
       title: "Ocular Disease Recognition",
@@ -29,7 +32,8 @@ export default function Projects() {
         "Applied image preprocessing filters and extracted key spatial features using Local Binary Patterns (LBP).",
         "Fine-tuned and trained a VGG-19 Convolutional Neural Network (CNN) to classify ophthalmic images, validating performance metrics."
       ],
-      github: "https://github.com/3200584-alt/ramkumar-portfolio"
+      github: "https://github.com/RamkumarRajendhiran/ramkumar-portfolio",
+      demo: null
     },
     {
       title: "Data Analysis & Visualization Project",
@@ -40,14 +44,15 @@ export default function Projects() {
         "Conducted data cleaning, preprocessing, and exploratory statistical analysis to discover user engagement correlations.",
         "Built interactive Power BI dashboards that visualized campaign health and key performance metrics."
       ],
-      github: "https://github.com/3200584-alt/ramkumar-portfolio"
+      github: "https://github.com/RamkumarRajendhiran/ramkumar-portfolio",
+      demo: null
     }
   ];
 
   return (
     <section id="projects" className="section">
       <div className="container">
-        <div className="section-header">
+        <div ref={headerRef} className="section-header section-animate">
           <h2 className="section-title">Projects Showcase</h2>
           <p className="section-subtitle">Academic research and web developments built using React, Python, and data processing models.</p>
         </div>
@@ -105,7 +110,7 @@ export default function Projects() {
                     key={t} 
                     style={{
                       fontSize: '0.75rem',
-                      padding: '0.2,rem 0.5rem',
+                      padding: '0.2rem 0.5rem',
                       borderRadius: '4px',
                       background: 'rgba(56, 189, 248, 0.08)',
                       color: 'var(--color-primary)',

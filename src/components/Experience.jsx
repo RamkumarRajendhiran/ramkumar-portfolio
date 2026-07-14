@@ -1,7 +1,10 @@
 import React from 'react';
 import { Briefcase, Calendar, MapPin, Tag } from 'lucide-react';
+import { isCollegeMatch } from '../utils/scroll';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 export default function Experience({ selectedVendor, selectedCollege, selectedTopic }) {
+  const headerRef = useScrollAnimation();
   const experiences = [
     {
       role: "Online Tutor",
@@ -75,7 +78,7 @@ export default function Experience({ selectedVendor, selectedCollege, selectedTo
   return (
     <section id="experience" className="section">
       <div className="container">
-        <div className="section-header">
+        <div ref={headerRef} className="section-header section-animate">
           <h2 className="section-title">Professional Experience</h2>
           <p className="section-subtitle">My teaching career, training engagements, corporate partnerships, and data internships.</p>
         </div>

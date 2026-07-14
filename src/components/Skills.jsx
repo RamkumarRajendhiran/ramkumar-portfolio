@@ -1,7 +1,9 @@
 import React from 'react';
 import { Terminal, Database, LineChart, Code2, Cpu, Wrench } from 'lucide-react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 export default function Skills({ selectedTopic, highlightedSkill }) {
+  const headerRef = useScrollAnimation();
   const skillCategories = [
     {
       title: "Programming Languages",
@@ -38,8 +40,8 @@ export default function Skills({ selectedTopic, highlightedSkill }) {
   return (
     <section id="skills" className="section">
       <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">Technical Subjects & Skills</h2>
+        <div ref={headerRef} className="section-header section-animate">
+          <h2 className="section-title">Technical Subjects &amp; Skills</h2>
           <p className="section-subtitle">Categorized breakdown of technical competencies and frameworks taught and utilized.</p>
         </div>
 
@@ -91,6 +93,7 @@ export default function Skills({ selectedTopic, highlightedSkill }) {
                     return (
                       <span 
                         key={s} 
+                        className="skill-tag"
                         style={{
                           fontSize: '0.85rem',
                           padding: '0.35rem 0.75rem',

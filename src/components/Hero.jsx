@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import { scrollToElement } from '../utils/scroll';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 // Custom Inline SVG Components for Brand Icons to avoid missing export errors in older Lucide versions
 const GithubIcon = (props) => (
@@ -18,6 +19,7 @@ const LinkedinIcon = (props) => (
 );
 
 export default function Hero({ onSelectCollege }) {
+  const animRef = useScrollAnimation();
   const resume = {
     name: "Ramkumar Rajendiran",
     title: "IT Trainer / Programming Instructor / Data Analyst",
@@ -25,13 +27,13 @@ export default function Hero({ onSelectCollege }) {
     phone: "+91-7639506694",
     location: "Chennai, Tamil Nadu",
     linkedin: "https://linkedin.com/in/ramkumar-rajendhiran-8037431aa",
-    github: "https://github.com/3200584-alt/ramkumar-portfolio"
+    github: "https://github.com/RamkumarRajendhiran/ramkumar-portfolio"
   };
 
   return (
     <section id="about" className="section" style={{ paddingTop: '5rem' }}>
       <div className="container">
-        <div className="glass-panel" style={{
+        <div ref={animRef} className="glass-panel section-animate" style={{
           padding: '3rem 2.5rem',
           position: 'relative',
           overflow: 'hidden',
@@ -95,7 +97,7 @@ export default function Hero({ onSelectCollege }) {
                 maxWidth: '650px',
                 textAlign: 'justify'
               }}>
-                Dedicated **IT Trainer and Programming Instructor** based in Chennai, delivering hands-on computer science training across several prominent engineering colleges. Specializing in Python, Java, Data Structures & Algorithms, MERN stack development, and exploratory Data Analysis with Power BI.
+                Dedicated <strong>IT Trainer and Programming Instructor</strong> based in Chennai, delivering hands-on computer science training across several prominent engineering colleges. Specializing in Python, Java, Data Structures &amp; Algorithms, MERN stack development, and exploratory Data Analysis with Power BI.
               </p>
 
               {/* Contact Info Badges */}

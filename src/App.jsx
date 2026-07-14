@@ -9,6 +9,7 @@ import Skills from './components/Skills';
 import Education from './components/Education';
 import Certifications from './components/Certifications';
 import Contact from './components/Contact';
+import Footer from './components/Footer';
 
 export default function App() {
   const [selectedVendor, setSelectedVendor] = useState(null);
@@ -134,18 +135,7 @@ export default function App() {
         <Contact />
       </main>
 
-      <footer style={{
-        textAlign: 'center',
-        padding: '2rem 1.5rem',
-        borderTop: '1px solid rgba(186, 230, 253, 0.1)',
-        background: 'rgba(11, 19, 41, 0.8)',
-        fontSize: '0.85rem',
-        color: 'var(--text-muted)'
-      }}>
-        <div className="container">
-          <p>© 2026 Ramkumar Rajendiran Portfolio. Built with React, Vite & Liquid Glass UI.</p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

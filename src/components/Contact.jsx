@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Send, CheckCircle, Mail } from 'lucide-react';
+import { Send, CheckCircle, Mail, AlertCircle } from 'lucide-react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 const WhatsappIcon = (props) => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" {...props}>
@@ -16,32 +17,53 @@ const LinkedinIcon = (props) => (
 );
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const headerRef = useScrollAnimation();
+  const formRef = useScrollAnimation();
 
-  const handleSubmit = (e) => {
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'success' | 'error'
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setForm({ name: '', email: '', message: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+    setStatus('sending');
+
+    try {
+      const res = await fetch('https://formspree.io/f/mrenbgkj', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        setForm({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 6000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+      }
+    } catch {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   return (
     <section id="contact" className="section" style={{ paddingBottom: '6rem' }}>
       <div className="container">
-        <div className="section-header">
+        <div ref={headerRef} className="section-header section-animate">
           <h2 className="section-title">Get in Touch</h2>
           <p className="section-subtitle">Interested in placement workshops, coding bootcamps, or data consulting? Drop a message!</p>
         </div>
 
-        <div className="glass-panel" style={{
+        <div ref={formRef} className="glass-panel section-animate delay-1" style={{
           maxWidth: '600px',
           margin: '0 auto',
           padding: '2.5rem',
           border: '1px solid var(--glass-border)',
           background: 'rgba(28, 37, 65, 0.3)'
         }}>
-          {submitted ? (
+          {status === 'success' ? (
             <div style={{
               textAlign: 'center',
               padding: '2rem 0',
@@ -56,59 +78,86 @@ export default function Contact() {
                 Message Sent Successfully!
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                Thank you, Ramkumar will get back to you shortly.
+                Thank you! Ramkumar will get back to you shortly.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {status === 'error' && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '10px',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
+                  color: '#f87171',
+                  fontSize: '0.85rem'
+                }}>
+                  <AlertCircle size={16} />
+                  Something went wrong. Please try emailing directly at rk8070039@gmail.com
+                </div>
+              )}
+
               <div style={inputGroupStyle}>
                 <label style={labelStyle}>Your Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   required
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  style={inputStyle} 
-                  placeholder="John Doe" 
+                  className="contact-input"
+                  style={inputStyle}
+                  placeholder="John Doe"
                 />
               </div>
 
               <div style={inputGroupStyle}>
                 <label style={labelStyle}>Email Address</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   required
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  style={inputStyle} 
-                  placeholder="john@example.com" 
+                  className="contact-input"
+                  style={inputStyle}
+                  placeholder="john@example.com"
                 />
               </div>
 
               <div style={inputGroupStyle}>
                 <label style={labelStyle}>Your Message</label>
-                <textarea 
-                  rows="4" 
+                <textarea
+                  rows="4"
                   required
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  style={{ ...inputStyle, resize: 'vertical' }} 
+                  className="contact-input"
+                  style={{ ...inputStyle, resize: 'vertical' }}
                   placeholder="Hi Ramkumar, we would love to have you conduct a workshop..."
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{
-                justifyContent: 'center',
-                padding: '0.85rem',
-                borderRadius: '12px',
-                marginTop: '0.5rem'
-              }}>
-                Send Message <Send size={16} />
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="btn btn-primary"
+                style={{
+                  justifyContent: 'center',
+                  padding: '0.85rem',
+                  borderRadius: '12px',
+                  marginTop: '0.5rem',
+                  opacity: status === 'sending' ? 0.7 : 1,
+                  cursor: status === 'sending' ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {status === 'sending' ? 'Sending…' : <>Send Message <Send size={16} /></>}
               </button>
             </form>
           )}
 
-          {/* Direct WhatsApp, LinkedIn, and Email Action Buttons */}
+          {/* Direct contact links */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -127,52 +176,28 @@ export default function Contact() {
               Or reach out directly via:
             </p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <a 
-                href="https://wa.me/917639506694" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn btn-secondary glow-on-hover" 
-                style={{ 
-                  flex: 1, 
-                  justifyContent: 'center', 
-                  minWidth: '120px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  textDecoration: 'none'
-                }}
+              <a
+                href="https://wa.me/917639506694"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-secondary glow-on-hover"
+                style={{ flex: 1, justifyContent: 'center', minWidth: '120px', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
               >
                 <WhatsappIcon style={{ color: '#25D366' }} /> WhatsApp
               </a>
-              <a 
-                href="https://www.linkedin.com/in/ramkumar-rajendiran-8037431aa/" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn btn-secondary glow-on-hover" 
-                style={{ 
-                  flex: 1, 
-                  justifyContent: 'center', 
-                  minWidth: '120px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  textDecoration: 'none'
-                }}
+              <a
+                href="https://www.linkedin.com/in/ramkumar-rajendiran-8037431aa/"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-secondary glow-on-hover"
+                style={{ flex: 1, justifyContent: 'center', minWidth: '120px', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
               >
                 <LinkedinIcon style={{ color: '#0077B5' }} /> LinkedIn
               </a>
-              <a 
-                href="mailto:rk8070039@gmail.com" 
-                className="btn btn-secondary glow-on-hover" 
-                style={{ 
-                  flex: 1, 
-                  justifyContent: 'center', 
-                  minWidth: '120px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  textDecoration: 'none'
-                }}
+              <a
+                href="mailto:rk8070039@gmail.com"
+                className="btn btn-secondary glow-on-hover"
+                style={{ flex: 1, justifyContent: 'center', minWidth: '120px', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
               >
                 <Mail size={16} style={{ color: 'var(--color-primary)' }} /> Email
               </a>
